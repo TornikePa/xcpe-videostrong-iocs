@@ -1,0 +1,272 @@
+XCPE / VIDEOSTRONG - CONSOLIDATED IOC FEED
+Updated: 2026-11-03
+Format: raw indicators; one item per line; comments identify role and source.
+Scope: XCPE backdoor, Videostrong infrastructure, and selected modules documented as loaded through XCPE.
+
+# Sources: Google GTIG (2026-11-03); Synthient (Videostrong research, 2026-11); BleepingComputer (2026-11-02).
+# TrendAI IOC attachment was not retrievable for direct parsing; no TrendAI-only indicators are attributed here.
+# VirusTotal links are lookup links only. Live VT detection counts/verdicts were not retrieved.
+
+[IPV4 - CORE XCPE]
+219.134.163.210      # MQTT C2 broker; TCP 3885-3887 [Google GTIG]
+219.134.163.211      # MQTT C2 broker; TCP 3885-3887 [Google GTIG]
+23.94.49.57          # Operator file hosting / C2 [Google GTIG]
+38.145.197.135       # anyevonline infrastructure / file server [Google GTIG]
+
+[IPV4 - ADDITIONAL XCPE / MODULE INFRASTRUCTURE]
+121.4.8.146          # Airship PCDN controller; TCP 22345 [Synthient]
+47.252.2.77          # LinkFog legacy fallback controller [Synthient]
+
+[DOMAINS - CORE XCPE]
+szbboys.com                  # XCPE C2 domain [Google GTIG]
+mqtt.szbboys.com             # MQTT C2 broker [Google GTIG]
+ott.szbboys.com              # Policy, file upload/download and OTA [Google GTIG]
+anyevonline.com              # Bootstrap / registration domain [Google GTIG]
+*.anyevonline.com            # Dynamic bootstrap subdomains [Google GTIG]
+mcstb.anyevonline.com        # MECOOL-specific bootstrap host [Google GTIG]
+extstb.anyevonline.com       # OEM policy bridge [Synthient]
+intermedia-arts.tv           # Fallback C2 domain [Google GTIG]
+yokatvonline.com             # YokaTV fallback / OEM service domain [Google GTIG]
+
+[DOMAINS - ADDITIONAL XCPE INFRASTRUCTURE]
+file.anyevonline.com         # Backdoor / payload file hosting [Synthient; BleepingComputer]
+mqtt.anyevonline.com         # Operator-side device management / C2 host [BleepingComputer]
+lib.anyevonline.com          # Historical policy API mirror [Synthient]
+extlib.anyevonline.com       # Legacy fallback; unresolved in source analysis [Synthient]
+router.anyevonline.com       # Backup router endpoint [Synthient]
+pool1.anyevonline.com        # Nexus geo pool [Synthient]
+pool1-b.anyevonline.com      # Nexus backup geo pool [Synthient]
+pool2.anyevonline.com        # Nexus geo pool [Synthient]
+config.intermedia-arts.tv   # V12 configuration endpoint [Synthient]
+feedback.intermedia-arts.tv # V12 feedback / telemetry endpoint [Synthient]
+config.yokatvonline.com     # YokaTV configuration / content API [Synthient]
+yokaplayer.yokatvonline.com # Yoka Player upload endpoint [Synthient]
+usermanual.yokatvonline.com # YokaTV user manual endpoint [Synthient]
+appstore.yokatvonline.com   # Yoka app distribution endpoint [Synthient]
+www.tms.yokatvonline.com    # Yoka TMS dashboard [Synthient]
+vstroplayer.szbboys.com     # VS Player upload endpoint [Synthient]
+
+[AFFILIATE MODULE ENDPOINTS - SEPARATE FROM CORE XCPE C2]
+# These endpoints belong to modules / SDKs observed in the XCPE ecosystem. A hit alone does not confirm x.cpe infection.
+vbox-airship-server.painet.work  # Airship PCDN controller; TCP 22345 [Synthient]
+gitlab.paigod.work               # Airship server-pool source [Synthient]
+nat-dev.titannet.io              # Airship NAT-check endpoint [Synthient]
+connect.sdk.absolut.fit          # AppSalt / Honeygain SDK controller [Synthient]
+blnc.traffmonetizer.com          # Traffmonetizer controller [Synthient]
+srv.traffmonetizer.com           # Traffmonetizer service host [Synthient]
+gtxvdqvuweqs.com                 # Gaganode SDK host [Synthient]
+api.package.coreservice.io       # Gaganode version API; TCP 10443 [Synthient]
+tech.yytsiy.com                  # Gaganode heartbeat; TCP 9901 [Synthient]
+api.smrtai.cc                    # LinkFog legacy fallback [Synthient]
+api.dddlink.link                 # LinkFog legacy fallback [Synthient]
+api.cloudbrokerapi.xyz           # LinkFog legacy fallback [Synthient]
+newdcs.bkdomain.cn                # LinkFog deployment channel; TCP 9992 / 9994 [Synthient]
+newstun.linkfog.cn                # LinkFog STUN endpoint; UDP 3478 [Synthient]
+webnest.linkfog.cn                # LinkFog organization / payload selection API [Synthient]
+mb002.jaguar-distributor.syslogcollector.com # Jaguar proxy controller; TCP 12000 [Synthient]
+bmw.bestipip.com                  # APSolo proxy relay; TCP 16000 [Synthient]
+termux.titannet.io                # TitanNet task / log API [Synthient]
+pcdn.titannet.io                  # TitanNet module bootstrap [Synthient]
+api.dgjm.online                   # ADMOYU / Moyu plugin configuration API [Synthient]
+dt-dev-ota-server.devicethread.com # DeviceThread development telemetry [Synthient]
+
+[PORTS / PROTOCOLS]
+TCP 3885-3887   # MQTT C2; correlate with 219.134.163.210 / 219.134.163.211 and mqtt.szbboys.com [Google GTIG]
+TCP 8000        # HTTP bootstrap, configuration and file transfer on anyevonline / ott.szbboys infrastructure [Google GTIG]
+TCP 22345       # Airship PCDN controller [Synthient]
+TCP 2375        # Backup router TLS endpoint; 38.145.197.135 / router.anyevonline.com [Synthient]
+TCP 10443       # Gaganode version API [Synthient]
+TCP 9901        # Gaganode heartbeat [Synthient]
+TCP 9992,9994   # LinkFog deployment channels [Synthient]
+UDP 3478        # LinkFog STUN [Synthient]
+TCP 12000       # Jaguar proxy controller [Synthient]
+TCP 8443        # Yoka TMS / OEM service [Synthient]
+TCP 8010        # Yoka player, manual and app-store endpoints [Synthient]
+
+[HTTP URI / REQUEST PATTERNS]
+POST /router/config/mqtt  # Bootstrap response returns MQTT broker, port, credentials and topic details [Google GTIG]
+POST /router/config/acs   # Returns geolocation, STUN and upload configuration [Google GTIG]
+POST /router/config/app   # Returns module configuration [Google GTIG]
+POST /cpe/file/upload     # Device file / log upload; ott.szbboys.com:8000 [Google GTIG]
+/otaupgrade/update       # Model / version-based OTA path [Synthient]
+
+[ANDROID PACKAGE / FILE INDICATORS]
+x.cpe
+com.oemservice
+com.abc.nexus
+com.android.system.ntp
+com.android.sso.auth.handler
+com.ota.service
+libexploit.so
+libseccomp_guard.so
+libtraceroute.so
+
+[ANDROID PERSISTENCE / CONFIGURATION PIVOTS]
+/oem/
+/system/priv-app/
+/system/etc/permissions/privapp-permissions-*.xml
+content://com.release.debug.provider/configs
+com.oem.share.provider
+ro.mecool.device
+persist.networkstack.uninstall
+persist.networkstack.skip_system_install
+persist.networkstack.install_time
+package_verifier_user_consent=-1
+
+[SAMPLE DEVICE FINGERPRINT - KM9PRO RESEARCH DEVICE]
+Brand=MeCool
+Model=UHD Google TV STB
+Product=HPR311-MECOOL
+Device=RMQ
+Board=HPR3A1325_4K
+BuildFingerprint=MECOOL/HPR311-MECOOL/RMQ:12/STTB.220726.001/C1.0.8_20250325:user/release-keys
+Firmware=C1.0.8_20250325
+
+[SHA256 - XCPE BACKDOOR / LOADER / CORE COMPONENTS]
+002ecacb7afe59836afc357074ea91308fd448b34dfdec0dc3d89f1bc15c1bb6  # x.cpe | VT: https://www.virustotal.com/gui/file/002ecacb7afe59836afc357074ea91308fd448b34dfdec0dc3d89f1bc15c1bb6
+01b8c78f5509119b3e27ea4d628048985b94b5e00db0431d843519cf1d3e2cde  # x.cpe | VT: https://www.virustotal.com/gui/file/01b8c78f5509119b3e27ea4d628048985b94b5e00db0431d843519cf1d3e2cde
+02490fa9f472ec872723d64d03402967e77932d2df72c588b0d7a7df9e17ae62  # x.cpe | VT: https://www.virustotal.com/gui/file/02490fa9f472ec872723d64d03402967e77932d2df72c588b0d7a7df9e17ae62
+049b626ca9bc4cf552e675dd5bf6215753caa3a3d28fab17b2a8fa9e0c8421c0  # x.cpe | VT: https://www.virustotal.com/gui/file/049b626ca9bc4cf552e675dd5bf6215753caa3a3d28fab17b2a8fa9e0c8421c0
+05e2e32e08073081adcb8875c3b7350fff53e7ea8f36d6388fb3daa626015d22  # x.cpe | VT: https://www.virustotal.com/gui/file/05e2e32e08073081adcb8875c3b7350fff53e7ea8f36d6388fb3daa626015d22
+07b511a6f7715ccd2f77b5f51e4cf46542ccaada99564252711f4a142ac26179  # x.cpe | VT: https://www.virustotal.com/gui/file/07b511a6f7715ccd2f77b5f51e4cf46542ccaada99564252711f4a142ac26179
+085662ba43e22d04d6f69b7b5176c68cedee6507c5d34973c94459f324b44c8d  # x.cpe | VT: https://www.virustotal.com/gui/file/085662ba43e22d04d6f69b7b5176c68cedee6507c5d34973c94459f324b44c8d
+0ae9baf869a84df9bfec5da16db5a367cf13ac53b60a44859ad39b6801811ec9  # x.cpe | VT: https://www.virustotal.com/gui/file/0ae9baf869a84df9bfec5da16db5a367cf13ac53b60a44859ad39b6801811ec9
+0d90d0e5009d0c67e978dffb1f78278fa22f296ebc14add1fe338abea8690867  # x.cpe | VT: https://www.virustotal.com/gui/file/0d90d0e5009d0c67e978dffb1f78278fa22f296ebc14add1fe338abea8690867
+0e8c50362e263ad793fa154b8b86f279513764b65a3876ce7af079b95e130298  # x.cpe | VT: https://www.virustotal.com/gui/file/0e8c50362e263ad793fa154b8b86f279513764b65a3876ce7af079b95e130298
+11a9f22718935389073301f616c7473f2afd90ae3582ea3011cf093eb422b7d6  # x.cpe | VT: https://www.virustotal.com/gui/file/11a9f22718935389073301f616c7473f2afd90ae3582ea3011cf093eb422b7d6
+17d4929578dac90af7da3a9c8bbd6f516ade8cc803c82a0f64849fb2a346a894  # x.cpe | VT: https://www.virustotal.com/gui/file/17d4929578dac90af7da3a9c8bbd6f516ade8cc803c82a0f64849fb2a346a894
+1806a1a93a6bce28cc6e95e9001f06370eaef9c66846ade9aecaf220d7ac91a4  # x.cpe | VT: https://www.virustotal.com/gui/file/1806a1a93a6bce28cc6e95e9001f06370eaef9c66846ade9aecaf220d7ac91a4
+1de0a368599ab04b8863c0e61c2d5a75e00f742a3326325f2870a9a72ee8d200  # x.cpe | VT: https://www.virustotal.com/gui/file/1de0a368599ab04b8863c0e61c2d5a75e00f742a3326325f2870a9a72ee8d200
+20af9e1538e1c211687c53e71318d9d265e36ce154457cade3266c7633fb953d  # x.cpe | VT: https://www.virustotal.com/gui/file/20af9e1538e1c211687c53e71318d9d265e36ce154457cade3266c7633fb953d
+21c46eacb2af06c0cd32e9078f056319acfa776466e7fb34ed4ae21c259adbf0  # x.cpe | VT: https://www.virustotal.com/gui/file/21c46eacb2af06c0cd32e9078f056319acfa776466e7fb34ed4ae21c259adbf0
+22c0279d23973fd9b3bfd9f42fd19ea1595c6e3f71a89b698828c79fa8e4edd2  # x.cpe | VT: https://www.virustotal.com/gui/file/22c0279d23973fd9b3bfd9f42fd19ea1595c6e3f71a89b698828c79fa8e4edd2
+270932e0857e2927e829d9f7eb62de15e2448049dbc2594c8760246229cbb678  # x.cpe | VT: https://www.virustotal.com/gui/file/270932e0857e2927e829d9f7eb62de15e2448049dbc2594c8760246229cbb678
+2aaa829447ae689d8b9bde422811c86ae67a5eee6acb63f269d773f7d6e73063  # x.cpe | VT: https://www.virustotal.com/gui/file/2aaa829447ae689d8b9bde422811c86ae67a5eee6acb63f269d773f7d6e73063
+2cdb1f0f0969766142f3debbab55eef5e24c15d49a513753f1f6b67bc3e8438b  # x.cpe | VT: https://www.virustotal.com/gui/file/2cdb1f0f0969766142f3debbab55eef5e24c15d49a513753f1f6b67bc3e8438b
+3126aa30062459543fe6e7966255d236f43e64d649767eafffd627c5295649b5  # x.cpe | VT: https://www.virustotal.com/gui/file/3126aa30062459543fe6e7966255d236f43e64d649767eafffd627c5295649b5
+35eb00285a8690d3c8d850ab041b486fd5a1001df922b0946f0d8cf6a0dd42d4  # x.cpe | VT: https://www.virustotal.com/gui/file/35eb00285a8690d3c8d850ab041b486fd5a1001df922b0946f0d8cf6a0dd42d4
+36dbe473ff1c2e87fc6fd3f2c2ae927c1370338825b419ce8f1ca353e6a3529f  # x.cpe | VT: https://www.virustotal.com/gui/file/36dbe473ff1c2e87fc6fd3f2c2ae927c1370338825b419ce8f1ca353e6a3529f
+3768f470934a111f1c3e3d098eb1392a3cb6f3e298ef5fd2a6309e6a98ee1e18  # x.cpe | VT: https://www.virustotal.com/gui/file/3768f470934a111f1c3e3d098eb1392a3cb6f3e298ef5fd2a6309e6a98ee1e18
+39792bed070b1128cd67178591804fafb82112d371ccdb2b51cd600b2d435922  # x.cpe | VT: https://www.virustotal.com/gui/file/39792bed070b1128cd67178591804fafb82112d371ccdb2b51cd600b2d435922
+3e891f061daf73c2edc14ed98512cad008346679645e8165320bf96fb8b0e0d6  # x.cpe | VT: https://www.virustotal.com/gui/file/3e891f061daf73c2edc14ed98512cad008346679645e8165320bf96fb8b0e0d6
+415d54757c2f96fd28404f1ab8da1e90297a381ec3d7fb47d33126644a0a421b  # x.cpe | VT: https://www.virustotal.com/gui/file/415d54757c2f96fd28404f1ab8da1e90297a381ec3d7fb47d33126644a0a421b
+41def231255a382906f058b19bcf4980011d40f864112a0834fed984ca41b97f  # x.cpe | VT: https://www.virustotal.com/gui/file/41def231255a382906f058b19bcf4980011d40f864112a0834fed984ca41b97f
+42f85b36642256475bce08627c152e76f8feb3d55c7754eb6b888fed617b5ff3  # x.cpe | VT: https://www.virustotal.com/gui/file/42f85b36642256475bce08627c152e76f8feb3d55c7754eb6b888fed617b5ff3
+471e76cce87e280a2fe11046fcb58c0817558ffbc8a526d84fb40c45b03ac9bc  # x.cpe | VT: https://www.virustotal.com/gui/file/471e76cce87e280a2fe11046fcb58c0817558ffbc8a526d84fb40c45b03ac9bc
+486a784cbd6335d31214edd7bed7fcfb486b875374597c139826c77c91ccbbaa  # x.cpe | VT: https://www.virustotal.com/gui/file/486a784cbd6335d31214edd7bed7fcfb486b875374597c139826c77c91ccbbaa
+4b84b48018f0a8019dfadbd4d19eae60b916ef4596e53e3a9bd0bd4c575a22de  # x.cpe | VT: https://www.virustotal.com/gui/file/4b84b48018f0a8019dfadbd4d19eae60b916ef4596e53e3a9bd0bd4c575a22de
+4c46a10ec3a2deb77b59b25fe929e434a1126a0428d54baac1e6df769bf09358  # x.cpe | VT: https://www.virustotal.com/gui/file/4c46a10ec3a2deb77b59b25fe929e434a1126a0428d54baac1e6df769bf09358
+4e184ab960d6265e781921218375fbfaf7e835b54cb4b419a35cff99dd8c7fe1  # x.cpe | VT: https://www.virustotal.com/gui/file/4e184ab960d6265e781921218375fbfaf7e835b54cb4b419a35cff99dd8c7fe1
+4f1e511e903ccc78e5500e82d08862da44a68b81a52f02754ed9a87c5cc5dc5e  # x.cpe | VT: https://www.virustotal.com/gui/file/4f1e511e903ccc78e5500e82d08862da44a68b81a52f02754ed9a87c5cc5dc5e
+4f860efa8d8b9b8f35f343d524500181607a0cdc9fac35394cf16b71ff4ad1d0  # x.cpe | VT: https://www.virustotal.com/gui/file/4f860efa8d8b9b8f35f343d524500181607a0cdc9fac35394cf16b71ff4ad1d0
+5ae5df84cdce0100eb957cf235d1f3fd85fa634592e7ca137de12535e9f8ad2a  # x.cpe | VT: https://www.virustotal.com/gui/file/5ae5df84cdce0100eb957cf235d1f3fd85fa634592e7ca137de12535e9f8ad2a
+5b73e39f7fcfdc3d20b38a00e620e01a9078a8e92f888c456eaca0f78f5e7c6e  # x.cpe | VT: https://www.virustotal.com/gui/file/5b73e39f7fcfdc3d20b38a00e620e01a9078a8e92f888c456eaca0f78f5e7c6e
+5e9e0f8dc96fbf4d3e78dae90d434c424045c823316dea394e3ca39d97cda9bb  # x.cpe | VT: https://www.virustotal.com/gui/file/5e9e0f8dc96fbf4d3e78dae90d434c424045c823316dea394e3ca39d97cda9bb
+62040f86c305952b997d2fcda166759cfe1d3f5f340df115d062a1932d53e466  # x.cpe | VT: https://www.virustotal.com/gui/file/62040f86c305952b997d2fcda166759cfe1d3f5f340df115d062a1932d53e466
+6402c274920a0bc7ed5f980af814a7e75cb18cfdd11342bb8a4450bdcdcf86bb  # x.cpe | VT: https://www.virustotal.com/gui/file/6402c274920a0bc7ed5f980af814a7e75cb18cfdd11342bb8a4450bdcdcf86bb
+677e64469956197d424186c0225020e22a48dab8309fa48ca50afd25d33f6c2d  # x.cpe | VT: https://www.virustotal.com/gui/file/677e64469956197d424186c0225020e22a48dab8309fa48ca50afd25d33f6c2d
+6a995ad8cf248875b47f9d89518c7a21ec7cce2c252c181414e8935c6001ea36  # x.cpe | VT: https://www.virustotal.com/gui/file/6a995ad8cf248875b47f9d89518c7a21ec7cce2c252c181414e8935c6001ea36
+6b55b8b3ff7bd31af93b59612f0800c09e49d3badc772e2395736616c87d5612  # x.cpe | VT: https://www.virustotal.com/gui/file/6b55b8b3ff7bd31af93b59612f0800c09e49d3badc772e2395736616c87d5612
+6d3fd13dd305a0a4f04e9f8f8c5d0605dafbb7f465ae78486d3a6ffe99f25170  # x.cpe | VT: https://www.virustotal.com/gui/file/6d3fd13dd305a0a4f04e9f8f8c5d0605dafbb7f465ae78486d3a6ffe99f25170
+6f7f4b22eb7841d2b828f1eda77173880d42267a33b387bee9cee983c03bf291  # x.cpe | VT: https://www.virustotal.com/gui/file/6f7f4b22eb7841d2b828f1eda77173880d42267a33b387bee9cee983c03bf291
+7232cb8a2a0d0b6e21cfbeb70431ed8f1575b3dcbea2620e6aa6c04a02f656a9  # x.cpe | VT: https://www.virustotal.com/gui/file/7232cb8a2a0d0b6e21cfbeb70431ed8f1575b3dcbea2620e6aa6c04a02f656a9
+760df0aa754e760342885ed289753dc8c9964ab2105b91953741b07a14b33328  # x.cpe | VT: https://www.virustotal.com/gui/file/760df0aa754e760342885ed289753dc8c9964ab2105b91953741b07a14b33328
+76b4bf6f55aaab35428260a830ac9a2c437a09aefd521c5b51618db47beca3b2  # x.cpe | VT: https://www.virustotal.com/gui/file/76b4bf6f55aaab35428260a830ac9a2c437a09aefd521c5b51618db47beca3b2
+786061082203ba868710c94fbf6da04fb7535a4f4463e539d56d43bea2f5eeb6  # x.cpe | VT: https://www.virustotal.com/gui/file/786061082203ba868710c94fbf6da04fb7535a4f4463e539d56d43bea2f5eeb6
+8365658b7c51d7b607fe83d862d05e619cad5249c96db61a3d33a95c615c8194  # x.cpe | VT: https://www.virustotal.com/gui/file/8365658b7c51d7b607fe83d862d05e619cad5249c96db61a3d33a95c615c8194
+8953f9013eb8c31b27c86ba90edbdb9ecba216ed2cb6a992508c1964d53b8eee  # x.cpe | VT: https://www.virustotal.com/gui/file/8953f9013eb8c31b27c86ba90edbdb9ecba216ed2cb6a992508c1964d53b8eee
+92326f3065273d619f866f76e3542b6271886f92b1342c5ccc27cb7150c75176  # x.cpe | VT: https://www.virustotal.com/gui/file/92326f3065273d619f866f76e3542b6271886f92b1342c5ccc27cb7150c75176
+95b86ac9272bbc33016a812b39a9a77781d5f6f3173c4bdb0bd6b245549ba1f5  # x.cpe | VT: https://www.virustotal.com/gui/file/95b86ac9272bbc33016a812b39a9a77781d5f6f3173c4bdb0bd6b245549ba1f5
+98d7c1e8d06a82b986a087a63f73eaec593108ab63391206ec27681d9ccb2f11  # x.cpe | VT: https://www.virustotal.com/gui/file/98d7c1e8d06a82b986a087a63f73eaec593108ab63391206ec27681d9ccb2f11
+9df157f3975b582074033c80d0d586f3911fb6bd3813539e2edf87ada4eee9fb  # x.cpe | VT: https://www.virustotal.com/gui/file/9df157f3975b582074033c80d0d586f3911fb6bd3813539e2edf87ada4eee9fb
+a4f62cd7e033d200f2a5c3f56bcbb470182ab22d82ec50ec578a07b39832dc0e  # x.cpe | VT: https://www.virustotal.com/gui/file/a4f62cd7e033d200f2a5c3f56bcbb470182ab22d82ec50ec578a07b39832dc0e
+a710f0a2ffd64039137c4294ce14919067a8879cc0761d87f428b73a0839df5b  # x.cpe | VT: https://www.virustotal.com/gui/file/a710f0a2ffd64039137c4294ce14919067a8879cc0761d87f428b73a0839df5b
+b01cd8e6c0828f03b0ed755cccd7f661f47e910aa6a8deddcb352dbaf4b01a35  # x.cpe | VT: https://www.virustotal.com/gui/file/b01cd8e6c0828f03b0ed755cccd7f661f47e910aa6a8deddcb352dbaf4b01a35
+b97fb1a0061083b0530190d9b12b0158b79dd31ea2cb4c6fb3a14d83d86d89ce  # x.cpe | VT: https://www.virustotal.com/gui/file/b97fb1a0061083b0530190d9b12b0158b79dd31ea2cb4c6fb3a14d83d86d89ce
+b9a193089f72a8dd6deae28b8e9665ba27337995a384a8f1edc3bcb712c01157  # x.cpe | VT: https://www.virustotal.com/gui/file/b9a193089f72a8dd6deae28b8e9665ba27337995a384a8f1edc3bcb712c01157
+bb559084c622e505dac3a2a48c45561478f3cb40f9a5922c23b247ae8f38d5c5  # x.cpe | VT: https://www.virustotal.com/gui/file/bb559084c622e505dac3a2a48c45561478f3cb40f9a5922c23b247ae8f38d5c5
+bb89b38b3319c9f077ac984c6458101be8a94935e5482eed83b5dfb9841804a2  # x.cpe | VT: https://www.virustotal.com/gui/file/bb89b38b3319c9f077ac984c6458101be8a94935e5482eed83b5dfb9841804a2
+bcf142ba37e897b7fcbb89353ec9b5a7c3bfb1d167838d3b91c347b9fdfb2230  # x.cpe | VT: https://www.virustotal.com/gui/file/bcf142ba37e897b7fcbb89353ec9b5a7c3bfb1d167838d3b91c347b9fdfb2230
+be9990489fbf36100ec148f3a83795f2674d17063edb8accd560f1ce2f97dedd  # x.cpe | VT: https://www.virustotal.com/gui/file/be9990489fbf36100ec148f3a83795f2674d17063edb8accd560f1ce2f97dedd
+cd29655c3425bd756b9ef35c4b6cf9d39bdb474c570e9ec30560efe9844a7f26  # x.cpe | VT: https://www.virustotal.com/gui/file/cd29655c3425bd756b9ef35c4b6cf9d39bdb474c570e9ec30560efe9844a7f26
+cdb1157fce2b87da5b646ff5440d1ca073a835d99c9fa0a47d5ff56321a6b6a0  # x.cpe | VT: https://www.virustotal.com/gui/file/cdb1157fce2b87da5b646ff5440d1ca073a835d99c9fa0a47d5ff56321a6b6a0
+ce3d0683d57ea8eeebd2400cbe7f54347414930d28fa89fe6baa62bb566c6518  # x.cpe | VT: https://www.virustotal.com/gui/file/ce3d0683d57ea8eeebd2400cbe7f54347414930d28fa89fe6baa62bb566c6518
+d70c53aa884fe7d0e41f09f609a96717bd7fb527e4d11986809b588f7ecd6122  # x.cpe | VT: https://www.virustotal.com/gui/file/d70c53aa884fe7d0e41f09f609a96717bd7fb527e4d11986809b588f7ecd6122
+da5246fb62db91eda31df0873835e1c96a3187df1a760ffc87abf9788ba69104  # x.cpe | VT: https://www.virustotal.com/gui/file/da5246fb62db91eda31df0873835e1c96a3187df1a760ffc87abf9788ba69104
+dca25ff0d11d49e9969be3177b50aa8bf120b5ad3946409dedae143a8a69aa99  # x.cpe | VT: https://www.virustotal.com/gui/file/dca25ff0d11d49e9969be3177b50aa8bf120b5ad3946409dedae143a8a69aa99
+e92df23222acf808b671b5fd0aebc60064efd080c1196ab0ada9c66c79a72c88  # x.cpe | VT: https://www.virustotal.com/gui/file/e92df23222acf808b671b5fd0aebc60064efd080c1196ab0ada9c66c79a72c88
+f3a23ac708ab2d7dee24a9b0565bfc619b43d07b2665ee52ec8e853b8d5b6e46  # x.cpe | VT: https://www.virustotal.com/gui/file/f3a23ac708ab2d7dee24a9b0565bfc619b43d07b2665ee52ec8e853b8d5b6e46
+f451c0b770049c71fb0d8efd45115dfc3336f636fb6a0617ec5a5c58632196f4  # x.cpe | VT: https://www.virustotal.com/gui/file/f451c0b770049c71fb0d8efd45115dfc3336f636fb6a0617ec5a5c58632196f4
+f69b8a1db8c79ecb6468ffbe147909c06da881486a935593909b76243131d82b  # x.cpe | VT: https://www.virustotal.com/gui/file/f69b8a1db8c79ecb6468ffbe147909c06da881486a935593909b76243131d82b
+facef2228db7b2c05d8a27552168b0c24c930794c8ca1ea1efff3960ef3e6f0e  # x.cpe | VT: https://www.virustotal.com/gui/file/facef2228db7b2c05d8a27552168b0c24c930794c8ca1ea1efff3960ef3e6f0e
+fcdb7dde95931219e5bb411907e50bdb0f048e4be9581b232dec55ebf2c6e486  # x.cpe | VT: https://www.virustotal.com/gui/file/fcdb7dde95931219e5bb411907e50bdb0f048e4be9581b232dec55ebf2c6e486
+0ed2ec71901210b1100c6a4abee48ad36774962496d57577d58630072e30cc60  # com.oemservice | VT: https://www.virustotal.com/gui/file/0ed2ec71901210b1100c6a4abee48ad36774962496d57577d58630072e30cc60
+0fe4c7d38a75b675e4d5b9528433a476ccde95616f7187040e6e4c4e1a5f388e  # com.oemservice | VT: https://www.virustotal.com/gui/file/0fe4c7d38a75b675e4d5b9528433a476ccde95616f7187040e6e4c4e1a5f388e
+1c34f551cea557b24f6f3776de7fecaf40536c749d5b9734242acde4dd578c53  # com.oemservice | VT: https://www.virustotal.com/gui/file/1c34f551cea557b24f6f3776de7fecaf40536c749d5b9734242acde4dd578c53
+1c8408f80dcdac5c9cae5b2ac785e6f0aa97ad2ec6c8701e3ab661882e9fdd63  # com.oemservice | VT: https://www.virustotal.com/gui/file/1c8408f80dcdac5c9cae5b2ac785e6f0aa97ad2ec6c8701e3ab661882e9fdd63
+1c989cef1b9cc5a39715d172e3f3acb574a958765f4a9df50c952c0a359826cd  # com.oemservice | VT: https://www.virustotal.com/gui/file/1c989cef1b9cc5a39715d172e3f3acb574a958765f4a9df50c952c0a359826cd
+24646c9f4a7b2a1294810f7f3f4125fa21c36383459821b4d51c48375d94a493  # com.oemservice | VT: https://www.virustotal.com/gui/file/24646c9f4a7b2a1294810f7f3f4125fa21c36383459821b4d51c48375d94a493
+2a443baa14be4a2a45b7ea477a8ffc326169aaecc89919a42cf386d0978db0f2  # com.oemservice | VT: https://www.virustotal.com/gui/file/2a443baa14be4a2a45b7ea477a8ffc326169aaecc89919a42cf386d0978db0f2
+2d4b5c50e57e3e9b57d4ee02bef1dcd56163550a5e01c966e0f0fb6d46b2aeed  # com.oemservice | VT: https://www.virustotal.com/gui/file/2d4b5c50e57e3e9b57d4ee02bef1dcd56163550a5e01c966e0f0fb6d46b2aeed
+350d6db477e8567cf9347c1144b3a0b25550e7ce63bb800b056b8a7a8ef56af4  # com.oemservice | VT: https://www.virustotal.com/gui/file/350d6db477e8567cf9347c1144b3a0b25550e7ce63bb800b056b8a7a8ef56af4
+3ec2f3411720cdc3b3b6851d359c739ad1003eaa30a9c075dceac174431f1833  # com.oemservice | VT: https://www.virustotal.com/gui/file/3ec2f3411720cdc3b3b6851d359c739ad1003eaa30a9c075dceac174431f1833
+498d0862ce2ce972e9ac9bd3ea592b9f9cd8c5119dcc90fcb1b14a547889e9f9  # com.oemservice | VT: https://www.virustotal.com/gui/file/498d0862ce2ce972e9ac9bd3ea592b9f9cd8c5119dcc90fcb1b14a547889e9f9
+4fd0ddb15849137df77e8cb86cd951d2d220fd8dd5b8b03c5a7e23e815092fdd  # com.oemservice | VT: https://www.virustotal.com/gui/file/4fd0ddb15849137df77e8cb86cd951d2d220fd8dd5b8b03c5a7e23e815092fdd
+5a6867298aba53866581d12fe67c563fd375101f8fcebbdc20579fdcc3b73732  # com.oemservice | VT: https://www.virustotal.com/gui/file/5a6867298aba53866581d12fe67c563fd375101f8fcebbdc20579fdcc3b73732
+7316469fd5b9fa633d9474a14b72716b9ceb4bbf656725ab79409da608eda2be  # com.oemservice | VT: https://www.virustotal.com/gui/file/7316469fd5b9fa633d9474a14b72716b9ceb4bbf656725ab79409da608eda2be
+99874d087e3f72a9d78439118361f438f7a156af318c788183d338cc315d7fa8  # com.oemservice | VT: https://www.virustotal.com/gui/file/99874d087e3f72a9d78439118361f438f7a156af318c788183d338cc315d7fa8
+b2e55884c819c210eaf46aeb7970a1ec623944b5d1a8c2178904f998b9682ac0  # com.oemservice | VT: https://www.virustotal.com/gui/file/b2e55884c819c210eaf46aeb7970a1ec623944b5d1a8c2178904f998b9682ac0
+c57ab1b8e5ad806a850b5cf004fbb6779edf6d6e2948f3373766a509e0685ca1  # com.oemservice | VT: https://www.virustotal.com/gui/file/c57ab1b8e5ad806a850b5cf004fbb6779edf6d6e2948f3373766a509e0685ca1
+c9baee088d95f24ea9945ba6f0f9f9d717680aaa4d347a42e912785338ac539f  # com.oemservice | VT: https://www.virustotal.com/gui/file/c9baee088d95f24ea9945ba6f0f9f9d717680aaa4d347a42e912785338ac539f
+caaa41d8246d2a21d55cab9b19749d2c636c7546ce42803e4ec380727e8af50f  # com.oemservice | VT: https://www.virustotal.com/gui/file/caaa41d8246d2a21d55cab9b19749d2c636c7546ce42803e4ec380727e8af50f
+cad908ad09d029971b24b4ad653fe680101ccaddd94b4e530c58bf45430fd1a4  # com.oemservice | VT: https://www.virustotal.com/gui/file/cad908ad09d029971b24b4ad653fe680101ccaddd94b4e530c58bf45430fd1a4
+f4c064e4e6e01b63f25162818a3e7672a2ee613d23b2b58b14bd0708d46b69c5  # com.oemservice | VT: https://www.virustotal.com/gui/file/f4c064e4e6e01b63f25162818a3e7672a2ee613d23b2b58b14bd0708d46b69c5
+0135b69bab304564628488829b825050d1dd6dab98e86ec6776839dac9365af9  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/0135b69bab304564628488829b825050d1dd6dab98e86ec6776839dac9365af9
+02b94ae4ee0fd2bab915fe2911d15ee70e51ca0564ba43c746593e7fe0b7ccd3  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/02b94ae4ee0fd2bab915fe2911d15ee70e51ca0564ba43c746593e7fe0b7ccd3
+08edc09f4465cd784360c223275c45a5e95d7dc8a5e796537ea5251848b3d2f1  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/08edc09f4465cd784360c223275c45a5e95d7dc8a5e796537ea5251848b3d2f1
+1f2ab93c35f0c37d9b88f82268183a2f77491aa6b142a48381524b18e217b960  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/1f2ab93c35f0c37d9b88f82268183a2f77491aa6b142a48381524b18e217b960
+3295d193ac405112ad076d7fab23274d44f8d0be6614a250a474c5ed7c95356f  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/3295d193ac405112ad076d7fab23274d44f8d0be6614a250a474c5ed7c95356f
+4e50013001ccbb89ddb707f9bcd41e3efbd408129bbbf75ba52293d343184cc3  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/4e50013001ccbb89ddb707f9bcd41e3efbd408129bbbf75ba52293d343184cc3
+5547392697063aab2f2cf7510048c4e957181bfe99d12173671fd1528b77c309  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/5547392697063aab2f2cf7510048c4e957181bfe99d12173671fd1528b77c309
+69116e8f681ea312e7e9e3a8a436f66b3e98566c621412599ecaaa25348daadb  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/69116e8f681ea312e7e9e3a8a436f66b3e98566c621412599ecaaa25348daadb
+6c774014b6434dd34716426e30ee77a3528f35fca65e24c90dc93b002dba6fe2  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/6c774014b6434dd34716426e30ee77a3528f35fca65e24c90dc93b002dba6fe2
+7eb1afbf4428a9a3b41a6faf9a7497aab1d7768a8370d475f580e574145a9e7d  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/7eb1afbf4428a9a3b41a6faf9a7497aab1d7768a8370d475f580e574145a9e7d
+83b3cfb7655483e0d421737c2bed707fdd1747f105deca6980233c011aaaea30  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/83b3cfb7655483e0d421737c2bed707fdd1747f105deca6980233c011aaaea30
+88e20768bc2d2be21d7eee04acb7b6f7e7cb0889828fff2045c4baa5a0311180  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/88e20768bc2d2be21d7eee04acb7b6f7e7cb0889828fff2045c4baa5a0311180
+a552bcb7d37c2bdb5c71e923157571598643de4051bfa3e5158fde3cb8709de7  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/a552bcb7d37c2bdb5c71e923157571598643de4051bfa3e5158fde3cb8709de7
+b556d41c4fc56e6e6ab946ad42a13aa0b94d4bf027cc96fb02806d8c4efaf13f  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/b556d41c4fc56e6e6ab946ad42a13aa0b94d4bf027cc96fb02806d8c4efaf13f
+bc08f6e6f1f241fd5389eea9a95cbbdbbc21671e79d7ae40f0974e2f7902ca3d  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/bc08f6e6f1f241fd5389eea9a95cbbdbbc21671e79d7ae40f0974e2f7902ca3d
+c0e1fad801d87531ee889fa6ec344f14868e7cdac06c93d2d3de742f1a9293c5  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/c0e1fad801d87531ee889fa6ec344f14868e7cdac06c93d2d3de742f1a9293c5
+cd8ef4ba20823b926b45a04946f24e45a7bcd4bf2bfc439cac8061a43f146903  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/cd8ef4ba20823b926b45a04946f24e45a7bcd4bf2bfc439cac8061a43f146903
+d4011b684ba389bf0b2dd8ded74fe8a4729b1cad4e6c18cfd928cb99a625a6e4  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/d4011b684ba389bf0b2dd8ded74fe8a4729b1cad4e6c18cfd928cb99a625a6e4
+d5a72e40f8821334ecfda30541435f8a9ad2fae1eb9aae133dd298bf1be374c7  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/d5a72e40f8821334ecfda30541435f8a9ad2fae1eb9aae133dd298bf1be374c7
+dcc4012e3a7838548a1e8a8c93e63f9671d6dbc9efcf0e661d9d0a6dd4cdee6e  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/dcc4012e3a7838548a1e8a8c93e63f9671d6dbc9efcf0e661d9d0a6dd4cdee6e
+e25616a0c64734f00d1f6dfb064d8f7bf1e4b95aac8b2e4aabb44b2950751bd0  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/e25616a0c64734f00d1f6dfb064d8f7bf1e4b95aac8b2e4aabb44b2950751bd0
+f2ed4a40fbb21d0560e82bdd2e85e825970d32052348241b487dd93191ebef2a  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/f2ed4a40fbb21d0560e82bdd2e85e825970d32052348241b487dd93191ebef2a
+f72bf627564753563cab3f4ca7fc473483b4abe9f723e388e8b9faa5f3d6cce2  # com.abc.nexus | VT: https://www.virustotal.com/gui/file/f72bf627564753563cab3f4ca7fc473483b4abe9f723e388e8b9faa5f3d6cce2
+42be8f18d6006ca092de191331d38e70a0d8383db701a759466dec59a0986135  # supporting component | VT: https://www.virustotal.com/gui/file/42be8f18d6006ca092de191331d38e70a0d8383db701a759466dec59a0986135
+7830ce3c3222dd9b25a77a16116dcf832a24b4b9a0bc998501e12415a828fb42  # supporting component | VT: https://www.virustotal.com/gui/file/7830ce3c3222dd9b25a77a16116dcf832a24b4b9a0bc998501e12415a828fb42
+b3690b3b013ac60752a6d05c3f53ea1f3e844d4603c5b90d258a30c596d0691b  # supporting component | VT: https://www.virustotal.com/gui/file/b3690b3b013ac60752a6d05c3f53ea1f3e844d4603c5b90d258a30c596d0691b
+ebcca22b96f7a30ae155efa2f25af29a369c6e9cfc99cb3bb0b72f35bc5528ed  # supporting component | VT: https://www.virustotal.com/gui/file/ebcca22b96f7a30ae155efa2f25af29a369c6e9cfc99cb3bb0b72f35bc5528ed
+
+[MD5 - SUPPORTING COMPONENTS]
+96146abb8c2a75dab8cc1bb46c323923  # AppSalt DEX class | VT: https://www.virustotal.com/gui/file/96146abb8c2a75dab8cc1bb46c323923
+ff96f093bbac32654db62ebb33276c64  # HiddenView classes.dex | VT: https://www.virustotal.com/gui/file/ff96f093bbac32654db62ebb33276c64
+
+[CERTIFICATE SHA256]
+17d97cb33ffa9ee04a47720ed79faf2985a85f4fabcfd98ccce26524e6ce562e  # Videostrong development certificate; signs selected Nexus builds
+9f6e3ba0389ee113e3cd861c57a4f39771c77ddb040a209bd919e5adc55b506b  # OTA signing certificate; hong.luo@videostrong.com identity
+f90a646f51f4b9a96694ccad099b20e97a1556c81c4fa3375dd6c42e8198231f  # Yoka / CPE / debug-tools signing certificate
+68d4874c5bd8535fc5b3f2cd75dc19dede89e3792c441d44ba51b1143e0867a  # TLS certificate for router.anyevonline.com
+
+[ANALYST NOTES]
+# Hunt DNS and outbound connections from Android TV / set-top-box VLANs first.
+# A match on core C2 infrastructure is high priority. Affiliate endpoints require device and traffic correlation.
+# Package names and device fingerprints are pivots, not standalone proof of infection.
+# The C2 infrastructure takedown does not remove firmware implants. Review historical DNS / firewall logs as well as current traffic.
+
+[REFERENCES]
+Google GTIG: https://cloud.google.com/blog/topics/threat-intelligence/shutting-the-door-on-the-xcpe-botnet/
+Synthient: https://github.com/synthient/public-research/tree/main/2026/11/Videostrong
+BleepingComputer: https://www.bleepingcomputer.com/news/security/google-disrupts-million-device-xcpe-android-malware-botnet-bans-tv-box-maker/
+TrendAI report: https://www.trendaisecurity.com/en-us/resources-insights/trendai-security-blog/trendaitm-research-helps-disrupt-android-tv-botnet-of-more-than-13-million-pre-infected-devices
